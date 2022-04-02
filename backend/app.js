@@ -1,9 +1,18 @@
+require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+
+// Environment
+const PORT = process.env.PORT || 5000;
+const DB_USER = process.env.DB_USER;
+const DB_PASS = process.env.DB_PASS;
+const DB_HOST = process.env.DB_HOST;
+const DB_PORT = process.env.DB_PORT;
+const DB_NAME = process.env.DB_NAME;
 
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
@@ -49,10 +58,12 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    `mongodb+srv://<username>:<password>@c<mongodb_service>/<dataabaseName>?retryWrites=true&w=majority`
+    `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?retryWrites=true&w=majority`
   )
   .then(() => {
-    app.listen(5000);
+    app.listen(PORT, () => {
+      console.log(`Server listening on port ${PORT}`);
+    });
   })
   .catch((err) => {
     console.log(err);
