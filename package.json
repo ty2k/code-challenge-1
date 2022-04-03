@@ -7,6 +7,9 @@
     "build": "bash build.sh",
     "start": "cd backend && npm run start"
   },
+  "engines": {
+    "node": "14.11.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ty2k/code-challenge-1.git"
