@@ -15,25 +15,28 @@ You will need to get a Google API token (accessed from a `GOOGLE_API_KEY` enviro
 
 This API key allows verifying the address that user enters on the "Create a Place" form via the Google Maps verification service. It also allows the front-end to find and display the location on the map based on geographic information stored in the database.
 
-### MongoDB environment variables
+### MongoDB connection string
 
-The Mongoose connection string specified in `./backend/app.js` is built from environment variables.
+The MongoDB connection string used in `./backend/app.js` can be used to connect to different MongoDB instances, depending on your environment. An example of how this connection string should be formatted is included in `./backend/.env.example`.
 
 **You will need to include the mongodb address and the credential in the call to the API.**
 
-## Run Locally
+## Run Locally in Development
 
 Environment variables should be saved locally in a `.env` file. Follow the example in `./backend/.env.example` to create this file.
 
 ### Database
 
-- This application requires MongoDB. You can find the schema in `./backend/models`.
-- Before invoking the API, you will need:
-  1. A running MongoDB instance
-  2. Credentials for the MongoDB instance set in environment variables and used in `./backend/app.js` at the `mongoose.connect()` function call
-- You can find information about setting up MongoDB in [DockerHub](https://hub.docker.com/_/mongo) and on the [MondoDB website](https://docs.cloudmanager.mongodb.com/tutorial/nav/manage-hosts/).
+This application requires MongoDB. You can find the schema in `./backend/models`. Before invoking the API, you will need:
 
-#### Create a database
+1. A running MongoDB instance
+2. Credentials for the MongoDB instance used in a `MONGODB_URI` environment variable that is used in `./backend/app.js` at the `mongoose.connect()` function call
+
+You can create a local MongoDB database instance or use a hosted instance for local development.
+
+#### Create a local development database
+
+If MongoDB isn't already installed, follow the [MongoDB installation instructions](https://www.mongodb.com/docs/manual/installation/).
 
 Enter the MongoDB shell:
 
@@ -44,24 +47,40 @@ mongosh
 Switch to a new empty database:
 
 ```js
-use <DB_NAME>
+use <Your Database Name>
 ```
 
-Insert a bogus record to initialize the empty database:
+Insert a test record to initialize the empty database:
 
 ```js
-db.user.insert({ name: "Ada Lovelace", age: 205 });
+db.log.insert({ name: 'Database initialized.' });
 ```
 
 Add a user
 
 ```js
 db.createUser({
-  user: "<DB_USER>",
-  pwd: "<DB_PASSWORD>",
-  roles: ["readWrite"],
+  user: '<Your Database User>',
+  pwd: '<Your Password>',
+  roles: ['readWrite'],
 });
 ```
+
+Create your MongoDB connection string (`MONGODB_URI`) from the values you used above and the location of your MongoDB instance. A sample can be found in `./backend/.env.example`:
+
+```
+MONGODB_URI="mongodb+srv://<Your Database User>:<Your Password>@<Your Host and Port>/<Your Database Name>?retryWrites=true&w=majority"
+```
+
+Save this value in your `./backend/.env` file to make it accessible in `./backend/app.js`.
+
+#### Create a hosted MongoDB instance
+
+You can find information about setting up MongoDB in [DockerHub](https://hub.docker.com/_/mongo) and on the [MondoDB website](https://docs.cloudmanager.mongodb.com/tutorial/nav/manage-hosts/).
+
+Alternatively, you can use [MongoDB Atlas](https://www.mongodb.com/atlas).
+
+Either option will allow you to create a connection string (`MONGODB_URI`) to save in `./backend/.env`.
 
 ### Back-end API
 
@@ -75,11 +94,24 @@ db.createUser({
 - Install the dependencies: `npm install`
 - Run React `npm start`
 
+### Access the application
+
+With the back-end API server and React front-end server both running locally, visit http://localhost:3000 in your browser to see the app in action.
+
 ## Run in Production
 
-Environment variables should be specified according to best practices in the cloud environment where you are deploying you app.
+Environment variables should be specified according to best practices in the cloud environment where you are deploying you app. On Heroku, [config vars](https://devcenter.heroku.com/articles/config-vars) can be set through the command line or through the Heroku Dashboard web GUI.
 
-### React front-end
+Use `MONGODB_URI` to point to your hosted MongoDB instance, and `GOOGLE_API_KEY` to access the Google Maps API.
 
-- Go to the front-end folder: `cd frontend`
-- Use included [Create React App](https://create-react-app.dev/) `build` script to create a production-optimized build: `npm build`
+### Create a production build
+
+#### React production build
+
+This project's root folder contains a `package.json` file with a `build` script that runs the script in `./build.sh`. This Bash script will use the included [Create React App](https://create-react-app.dev/) `build` script in the `./frontend` folder to create a production-optimized build of the React app. This is then copied to a static folder `./backend/frontend-build` which is served via the Express backend.
+
+This script will work out of the box on Heroku, but maybe require fine-tuning for other deployment environments. It assumes `bash` is available to run `./build.sh`.
+
+#### Run in production
+
+Once a production build of the React front-end has been created and is available in `./backend/frontend-build`, run the back-end Express server with `npm start` from the root folder. The included `./package.json` file works automatically with Heroku's Node.js buildpack.
