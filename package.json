@@ -8,7 +8,7 @@
     "start": "cd backend && npm run start"
   },
   "engines": {
-    "node": "14.11.0"
+    "node": "16.14.2"
   },
   "repository": {
     "type": "git",
