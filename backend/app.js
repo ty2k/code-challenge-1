@@ -8,11 +8,7 @@ const mongoose = require("mongoose");
 
 // Environment
 const PORT = process.env.PORT || 5000;
-const DB_USER = process.env.DB_USER;
-const DB_PASS = process.env.DB_PASS;
-const DB_HOST = process.env.DB_HOST;
-const DB_PORT = process.env.DB_PORT;
-const DB_NAME = process.env.DB_NAME;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
@@ -57,9 +53,7 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(
-    `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?retryWrites=true&w=majority`
-  )
+  .connect(MONGODB_URI)
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server listening on port ${PORT}`);
