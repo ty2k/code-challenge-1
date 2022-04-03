@@ -1,0 +1,22 @@
+{
+  "name": "code-challenge",
+  "version": "0.0.1",
+  "author": "Tyler Krys <Tyler.Krys@gov.bc.ca>",
+  "description": "Entrypoint for Heroku to build the application's React front-end and serve it from the Express API back-end",
+  "scripts": {
+    "build": "bash build.sh",
+    "start": "cd backend && npm run start"
+  },
+  "engines": {
+    "node": "16.14.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ty2k/code-challenge-1.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ty2k/code-challenge-1/issues"
+  },
+  "homepage": "https://github.com/ty2k/code-challenge-1#readme"
+}
