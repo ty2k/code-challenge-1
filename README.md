@@ -94,11 +94,24 @@ Either option will allow you to create a connection string (`MONGODB_URI`) to sa
 - Install the dependencies: `npm install`
 - Run React `npm start`
 
+### Access the application
+
+With the back-end API server and React front-end server both running locally, visit http://localhost:3000 in your browser to see the app in action.
+
 ## Run in Production
 
-Environment variables should be specified according to best practices in the cloud environment where you are deploying you app.
+Environment variables should be specified according to best practices in the cloud environment where you are deploying you app. On Heroku, [config vars](https://devcenter.heroku.com/articles/config-vars) can be set through the command line or through the Heroku Dashboard web GUI.
 
-### React front-end
+Use `MONGODB_URI` to point to your hosted MongoDB instance, and `GOOGLE_API_KEY` to access the Google Maps API.
 
-- Go to the front-end folder: `cd frontend`
-- Use included [Create React App](https://create-react-app.dev/) `build` script to create a production-optimized build: `npm build`
+### Create a production build
+
+#### React production build
+
+This project's root folder contains a `package.json` file with a `build` script that runs the script in `./build.sh`. This Bash script will use the included [Create React App](https://create-react-app.dev/) `build` script in the `./frontend` folder to create a production-optimized build of the React app. This is then copied to a static folder `./backend/frontend-build` which is served via the Express backend.
+
+This script will work out of the box on Heroku, but maybe require fine-tuning for other deployment environments. It assumes `bash` is available to run `./build.sh`.
+
+#### Run in production
+
+Once a production build of the React front-end has been created and is available in `./backend/frontend-build`, run the back-end Express server with `npm start` from the root folder. The included `./package.json` file works automatically with Heroku's Node.js buildpack.
