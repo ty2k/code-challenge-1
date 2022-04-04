@@ -1,0 +1,37 @@
+.dropdown {
+  margin: 1rem 0;
+}
+
+.dropdown label,
+.dropdown select {
+  display: block;
+}
+
+.dropdown label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.dropdown select {
+  width: 100%;
+  font: inherit;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  padding: 0.15rem 0.25rem;
+}
+
+.dropdown select:focus {
+  outline: none;
+  background: #ebebeb;
+  border-color: #510077;
+}
+
+.dropdown--invalid label,
+.dropdown--invalid p {
+  color: red;
+}
+
+.dropdown--invalid select {
+  border-color: red;
+  background: #ffd1d1;
+}
