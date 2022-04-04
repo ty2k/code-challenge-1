@@ -73,11 +73,13 @@ function Dropdown({
         onBlur={touchHandler}
         onChange={changeHandler}
         required={required}
+        data-testid='select'
       >
         {options.map((option) => (
           <option
             key={`dropdown-${id}-option-${option.value}`}
             value={option.value}
+            data-testid='select-option'
           >
             {option.label}
           </option>
