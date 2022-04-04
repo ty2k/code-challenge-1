@@ -31,6 +31,7 @@ function Dropdown({
   label,
   onChange,
   options,
+  required,
   validators,
 }) {
   const [inputState, dispatch] = useReducer(dropdownReducer, {
@@ -66,7 +67,13 @@ function Dropdown({
       }`}
     >
       <label htmlFor={id}>{label}</label>
-      <select name={id} id={id} onBlur={touchHandler} onChange={changeHandler}>
+      <select
+        name={id}
+        id={id}
+        onBlur={touchHandler}
+        onChange={changeHandler}
+        required={required}
+      >
         {options.map((option) => (
           <option
             key={`dropdown-${id}-option-${option.value}`}
@@ -94,6 +101,7 @@ Dropdown.propTypes = {
       label: PropTypes.string,
     })
   ).isRequired,
+  required: PropTypes.bool.isRequired,
   validators: PropTypes.arrayOf(PropTypes.shape({ type: PropTypes.string }))
     .isRequired,
 };
