@@ -6,14 +6,52 @@ The provided codebase is a simple [MERN stack](https://www.mongodb.com/mern-stac
 
 ## Environment Setup
 
-### Google API Token
+### Google API Key
 
-You will need to get a Google API token (accessed from a `GOOGLE_API_KEY` environment variable) from the [Google Cloud Platform console](https://developers.google.com/maps/documentation/embed/get-api-key). This value is referenced in two places in the application:
+You will need to get a Google API key from the [Google Cloud Platform console](https://developers.google.com/maps/documentation/embed/get-api-key). There are two places that reference the Google Maps API Key in the application, and they do _not_ need to be set to the same key value:
 
-- `./backend/util/location.js`
-- `./frontend/public/index.html`
+- `./backend/util/location.js` (accessed from the `GOOGLE_API_KEY` environment variable)
+- `./frontend/public/index.html` (in cleartext in the React static `index.html` file in the front-end)
 
-This API key allows verifying the address that user enters on the "Create a Place" form via the Google Maps verification service. It also allows the front-end to find and display the location on the map based on geographic information stored in the database.
+The Google Maps API allows verifying the address that user enters on the "Create a Place" form via the Google Maps verification service. It also allows the front-end to find and display the location on the map based on geographic information stored in the database.
+
+For security reasons, you should [secure your API key](https://cloud.google.com/docs/authentication/api-keys?hl=en_US#securing_an_api_key) by restricting it to the particular IP addresses or HTTP referrers you need to access the API from. Because we are using the API key directly from our React front-end in this application (where it has to be passed in cleartext), it is particularly important to restrict that API key's usage.
+
+#### Google Maps API key troubleshooting
+
+You must enable the [Geocoding API](https://developers.google.com/maps/documentation/geocoding/overview) for use with your API key. If this hasn't been enabled, the Google Maps API may return an error like the following:
+
+```json
+{
+  "error_message": "This API project is not authorized to use this API.",
+  "results": [],
+  "status": "REQUEST_DENIED"
+}
+```
+
+You must enable billing for your project before your API key will work. If billing is not set up, the Google Maps API may return an error like the following:
+
+```json
+{
+  "error_message": "You must enable Billing on the Google Cloud Project at https://console.cloud.google.com/project/_/billing/enable Learn more at https://developers.google.com/maps/gmp-get-started",
+  "results": [],
+  "status": "REQUEST_DENIED"
+}
+```
+
+If you receive an `InvalidKeyMapError` console error, your API key is missing/malformed in `./frontend/public/index.html`:
+
+```
+Google Maps JavaScript API error: InvalidKeyMapError
+https://developers.google.com/maps/documentation/javascript/error-messages#invalid-key-map-error
+```
+
+If you receive a `ApiNotActivatedMapError` console error, your API key needs the [Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/overview) enabled:
+
+```
+Google Maps JavaScript API error: ApiNotActivatedMapError
+https://developers.google.com/maps/documentation/javascript/error-messages#api-not-activated-map-error
+```
 
 ### MongoDB connection string
 
