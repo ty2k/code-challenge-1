@@ -124,13 +124,13 @@ Either option will allow you to create a connection string (`MONGODB_URI`) to sa
 
 - Go to the back-end folder: `cd backend`
 - Install the dependencies: `npm install`
-- Run Express API: `npm start`
+- Run Express API in development mode with Nodemon logging: `npm run start:dev`
 
 ### React front-end
 
 - Go to the front-end folder: `cd frontend`
 - Install the dependencies: `npm install`
-- Run React `npm start`
+- Run React: `npm run start`
 
 ### Access the application
 
