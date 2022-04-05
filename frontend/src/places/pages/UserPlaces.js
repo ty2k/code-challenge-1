@@ -39,7 +39,11 @@ const UserPlaces = () => {
         </div>
       )}
       {!isLoading && loadedPlaces && (
-        <PlaceList items={loadedPlaces} onDeletePlace={placeDeletedHandler} />
+        <PlaceList
+          displayCreator={false}
+          items={loadedPlaces}
+          onDeletePlace={placeDeletedHandler}
+        />
       )}
     </React.Fragment>
   );

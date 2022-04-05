@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/FormElements/Button';
@@ -101,11 +102,24 @@ const PlaceItem = props => {
             {auth.userId === props.creatorId && (
               <Button to={`/places/${props.id}`}>EDIT</Button>
             )}
-
             {auth.userId === props.creatorId && (
               <Button danger onClick={showDeleteWarningHandler}>
                 DELETE
               </Button>
+            )}
+            {props.displayCreator && (
+              <>
+                {auth.userId === props.creatorId ? (
+                  <div>Added by me</div>
+                ) : (
+                  <div className="place-item__creator">
+                    Added by{' '}
+                    <Link to={`/${props.creatorId}/places`}>
+                      {props.creatorName}
+                    </Link>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </Card>

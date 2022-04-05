@@ -103,6 +103,7 @@ const NewPlace = () => {
           validators={[VALIDATOR_REQUIRE()]}
           errorText="Please select a type for your new place."
           onChange={inputHandler}
+          required={true}
         />
         <Input
           id="description"
