@@ -130,6 +130,7 @@ Either option will allow you to create a connection string (`MONGODB_URI`) to sa
 
 - Go to the front-end folder: `cd frontend`
 - Install the dependencies: `npm install`
+- Run test suite: `npm run test`
 - Run React: `npm run start`
 
 ### Access the application
