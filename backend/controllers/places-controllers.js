@@ -8,6 +8,48 @@ const getCoordsForAddress = require('../util/location');
 const Place = require('../models/place');
 const User = require('../models/user');
 
+const getAllPlaces = async (req, res, next) => {
+  const placesPerPage = 5; // How many results to display per page
+  const page = parseInt(req.params.pageid) || 1;
+
+  let placesWithUser;
+  try {
+    placesWithUser = await Place.find({})
+      .populate('creator')
+      .limit(placesPerPage)
+      .skip(5 * (page - 1));
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not find any places.',
+      500
+    );
+    return next(error);
+  }
+
+  if (placesWithUser.length === 0) {
+    return next(new HttpError('Could not find places.', 404));
+  }
+
+  let placesCount;
+  try {
+    placesCount = await Place.count({});
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not find count of places.',
+      500
+    );
+    return next(error);
+  }
+
+  res.json({
+    places: placesWithUser.map((place) => place.toObject({ getters: true })),
+    count: placesCount,
+    perPage: placesPerPage,
+    currentPage: page,
+    totalPages: Math.ceil(placesCount / placesPerPage),
+  });
+};
+
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.pid;
 
@@ -212,13 +254,14 @@ const deletePlace = async (req, res, next) => {
     return next(error);
   }
 
-  fs.unlink(imagePath, err => {
+  fs.unlink(imagePath, (err) => {
     console.log(err);
   });
 
   res.status(200).json({ message: 'Deleted place.' });
 };
 
+exports.getAllPlaces = getAllPlaces;
 exports.getPlaceById = getPlaceById;
 exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
