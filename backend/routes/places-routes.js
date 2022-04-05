@@ -20,6 +20,9 @@ router.post(
     check('title')
       .not()
       .isEmpty(),
+    check('type')
+      .not()
+      .isEmpty(),
     check('description').isLength({ min: 5 }),
     check('address')
       .not()

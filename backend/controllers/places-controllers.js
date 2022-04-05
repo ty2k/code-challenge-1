@@ -70,7 +70,7 @@ const createPlace = async (req, res, next) => {
     );
   }
 
-  const { title, description, address } = req.body;
+  const { title, type, description, address } = req.body;
 
   let coordinates;
   try {
@@ -81,6 +81,7 @@ const createPlace = async (req, res, next) => {
 
   const createdPlace = new Place({
     title,
+    type,
     description,
     address,
     location: coordinates,

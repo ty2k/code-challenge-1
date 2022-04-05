@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Input from '../../shared/components/FormElements/Input';
+import Dropdown from '../../shared/components/FormElements/Dropdown';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
@@ -21,6 +22,10 @@ const NewPlace = () => {
   const [formState, inputHandler] = useForm(
     {
       title: {
+        value: '',
+        isValid: false
+      },
+      type: {
         value: '',
         isValid: false
       },
@@ -47,10 +52,11 @@ const NewPlace = () => {
     try {
       const formData = new FormData();
       formData.append('title', formState.inputs.title.value);
+      formData.append('type', formState.inputs.type.value);
       formData.append('description', formState.inputs.description.value);
       formData.append('address', formState.inputs.address.value);
       formData.append('image', formState.inputs.image.value);
-      await sendRequest('http://localhost:5000/api/places', 'POST', formData, {
+      await sendRequest('/api/places', 'POST', formData, {
         Authorization: 'Bearer ' + auth.token
       });
       history.push('/');
@@ -70,6 +76,33 @@ const NewPlace = () => {
           validators={[VALIDATOR_REQUIRE()]}
           errorText="Please enter a valid title."
           onInput={inputHandler}
+        />
+        <Dropdown
+          id="type"
+          initialValid={false}
+          initialValue=""
+          label="Type of place"
+          options={[
+            {
+              value: '',
+              label: '-- Please choose an option --',
+            },
+            {
+              value: 'Restaurant',
+              label: 'Restaurant',
+            },
+            {
+              value: 'Cafe',
+              label: 'Cafe',
+            },
+            {
+              value: 'Pub',
+              label: 'Pub',
+            },
+          ]}
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="Please select a type for your new place."
+          onChange={inputHandler}
         />
         <Input
           id="description"
